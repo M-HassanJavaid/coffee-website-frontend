@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    overflow-x: hidden;
+}
+
+.font-fjalla {
+    font-family: "Fjalla One", sans-serif;
+}
+
+.text-shadow-black {
+    text-shadow: 4px 4px 10px rgb(0, 0, 0);
+}
+
+/* Change dot color */
+.slick-dots li button:before {
+  color: white !important; /* gray color for inactive dots */
+  font-size: 12px !important; /* smaller dot size */
+}
+
+/* Change active dot color */
+.slick-dots li.slick-active button:before {
+  color: yellow !important; /* bright green for active dot */
+  font-size: 14px !important;
+}
+
+
+@media (max-width: 1024px) {
+    .open-nav{
+        height: auto;
+    }
+
+    .close-nav{
+        height: 0;
+    }
+}
