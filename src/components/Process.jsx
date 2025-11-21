@@ -4,7 +4,7 @@ import ProcessCard from "./ProcessCard.jsx";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-import Context from "../Context.js";
+import { HomeContext } from "../pages/Home.jsx";
 
 const Process = () => {
   const steps = [
@@ -32,7 +32,7 @@ const Process = () => {
 
   const processSection = useRef(null);
   const processCards = useRef([]);
-  const { isLoading } = useContext(Context)
+  const { isLoading } = useContext(HomeContext)
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -63,15 +63,8 @@ const Process = () => {
     return () => ctx.revert();
   }, []);
 
-  useLayoutEffect(()=>{
-    for (const key in isLoading) {
-      if (isLoading[key]) {
-        return;
-      }
-    }
+  useLayoutEffect(()=> ScrollTrigger.refresh() , [isLoading])
 
-    ScrollTrigger.refresh();
-  }, [isLoading])
 
   return (
     <section

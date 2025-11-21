@@ -1,13 +1,13 @@
 import { useRef , useEffect , useContext , useLayoutEffect} from 'react'
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { HomeContext } from '../pages/Home';
 gsap.registerPlugin(ScrollTrigger);
-import Context from '../Context';
 
 const WhyChooseUsCard = ({ img, title, desc }) => {
 
   const card = useRef()
-  const { isLoading } = useContext(Context)
+  const { isLoading } = useContext(HomeContext)
 
   useLayoutEffect(() => {
     gsap.fromTo(card.current, {
@@ -27,15 +27,8 @@ const WhyChooseUsCard = ({ img, title, desc }) => {
 
   }, [])
   
-  useLayoutEffect(()=>{
-    for (const key in isLoading) {
-      if (isLoading[key]) {
-        return;
-      }
-    }
-
-    ScrollTrigger.refresh();
-  }, [isLoading])
+    
+  useLayoutEffect(()=> ScrollTrigger.refresh() , [isLoading])
 
   return (
     <div className='h-90 w-75 m-3 bg-black relative isolate py-3 rounded-sm overflow-hidden text-center'>

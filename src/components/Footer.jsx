@@ -2,7 +2,7 @@ import { Facebook, Instagram, Twitter, Coffee } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="bg-neutral-950 text-zinc-200 py-16 px-10 md:px-20">
+    <footer className="bg-neutral-950 text-zinc-200 py-16 px-10 relative md:px-20">
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-10">
         {/* Brand */}
         <div className="space-y-4">

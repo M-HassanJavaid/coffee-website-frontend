@@ -4,8 +4,8 @@ import { gsap } from "gsap";
 import Button from "./Button";
 import { Eye, EyeClosed } from 'lucide-react'
 import Loader from "./Loader";
-import Context from "../Context";
-
+import { AppContext } from "../App";
+import { isEmail } from "validator";
 
 
 const LoginForm = () => {
@@ -14,7 +14,7 @@ const LoginForm = () => {
   const passwordInput = useRef();
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setisSubmitting] = useState(false);
-  const { setAlertMessage } = useContext(Context)
+  const { setAlertMessage } = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -24,21 +24,24 @@ const LoginForm = () => {
       let email = emailInput.current.value;
       let password = passwordInput.current.value;
 
-      console.log(email , password)
+      if (!email.trim() || !password.trim()) {
+        throw new Error('One or more field is empty.')
+      }
 
       setisSubmitting(true);
-      console.log('API is fetching...')
       let res = await fetch('https://coffee-website-backend-gamma.vercel.app/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           email,
           password
         })
       });
       res = await res.json();
+      console.log('On login form => ' + res.message)
 
       if (!res.ok) {
         throw new Error(res.message)
@@ -83,7 +86,7 @@ const LoginForm = () => {
   }, []);
 
   if (isSubmitting) {
-    return <Loader height='100vh' />
+    return <Loader style={{height: '100vh'}} />
   }
 
   return (

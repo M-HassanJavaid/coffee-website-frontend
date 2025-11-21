@@ -2,23 +2,20 @@ import { useLayoutEffect, useRef , useContext} from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger)
-import Context from "../Context";
+import { HomeContext } from "../pages/Home";
 import Button from "./Button";
 
-const CTASection = () => {
+const CTASection = ({parentPage}) => {
   const sectionRef = useRef();
-  const { isLoading } = useContext(Context)
 
-  useLayoutEffect(()=>{
-    for (const key in isLoading) {
-      if (isLoading[key]) {
-        return;
-      }
-    }
+  if (parentPage === 'home') {
+    const { isLoading } = useContext(HomeContext)
+    useLayoutEffect(()=> ScrollTrigger.refresh() , [isLoading])
+  }
 
-    ScrollTrigger.refresh();
-  }, [isLoading])
 
+  
+  
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".cta-content", {
@@ -31,10 +28,10 @@ const CTASection = () => {
           start: 'top 70%',
           end: 'top 50%',
           toggleActions: "play none none reverse",
-
+          
         }
       });
-
+      
       gsap.from(".cta-btn", {
         scale: 0.8,
         opacity: 0,
@@ -46,13 +43,14 @@ const CTASection = () => {
           start: 'top 70%',
           end: 'top 50%',
           toggleActions: "play none none reverse",
-
+          
         }
       });
     }, sectionRef);
-
+    
     return () => ctx.revert();
   }, []);
+  
 
   return (
     <section

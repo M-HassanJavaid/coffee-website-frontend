@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import SignupForm from '../components/SignupForm'
 import AlertBox from '../components/AlertBox'
 
+
 const Signup = () => {
   return (
     <>

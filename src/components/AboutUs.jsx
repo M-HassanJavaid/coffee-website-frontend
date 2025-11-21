@@ -3,22 +3,15 @@ import Button from './Button.jsx';
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
-import Context from '../Context.js';
+import { HomeContext } from '../pages/Home.jsx';
 
 const aboutUs = () => {
 
   const img = useRef(null)
-  const { isLoading } = useContext(Context)
+  const { isLoading } = useContext(HomeContext)
 
 
   useLayoutEffect(() => {
-
-    for (const key in isLoading) {
-      if (isLoading[key]) {
-        return;
-      }
-    }
-
     const ctx = gsap.context(
       gsap.from(img.current , {
         x: -150,
@@ -35,7 +28,9 @@ const aboutUs = () => {
 
       return ()=> ctx.revert()
 
-  }, [isLoading])
+  }, [])
+
+  useLayoutEffect(()=> ScrollTrigger.refresh() , [isLoading])
 
     return (
     <section className="bg-neutral-800 text-white py-20 px-6 flex gap-3 justify-around flex-wrap" >

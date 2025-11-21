@@ -4,8 +4,9 @@ import { gsap } from "gsap";
 import Button from "./Button";
 import { Eye, EyeClosed } from 'lucide-react'
 import Loader from "./Loader";
-import Context from "../Context";
 import { isEmail, isStrongPassword } from 'validator'
+import { AppContext } from "../App";
+
 
 
 
@@ -16,7 +17,7 @@ const SignupForm = () => {
     const nameInput = useRef();
     const [showPassword, setShowPassword] = useState(false)
     const [isSubmitting, setisSubmitting] = useState(false);
-    const { setAlertMessage } = useContext(Context)
+    const { setAlertMessage } = useContext(AppContext)
 
     const navigate = useNavigate()
 
@@ -105,7 +106,7 @@ const SignupForm = () => {
     }, []);
 
     if (isSubmitting) {
-        return <Loader height='100vh' />
+        return <Loader style={{height: '100vh'}} />
     }
 
     return (
