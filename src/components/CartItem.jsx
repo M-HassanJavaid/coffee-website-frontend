@@ -1,20 +1,95 @@
 import { Pencil, XCircle, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import QuantityInput from "./quantityInput";
+import TinySpinner from "./TinySpinner";
+import { AppContext } from "../App";
 
 const CartItem = ({
     image,
     id,
     title,
     options,
-    quantity: originalQty,
+    quantity,
     totalPrice,
     note,
+    setCartItems,
+    setTotalPrice
 }) => {
-    const [quantity, setQuantity] = useState(originalQty);
+
+    const [isRemoving, setIsRemoving] = useState(false);
+    const [isQuantityChanging, setIsQuantityChanging] = useState(false)
+
+    const { alertMessage, setAlertMessage } = useContext(AppContext);
+
+    async function changeQuantity(id, quantity, action) {
+        try {
+
+            setIsQuantityChanging(true)
+
+            if (action === 'increment') {
+                quantity++;
+            } else {
+                quantity--;
+            }
+
+            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/update/${id}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    quantity
+                })
+            });
+
+            res = await res.json();
+            if (!res.ok) throw new Error(res.message)
+
+            console.log(res)
+
+            setCartItems(res.cart.items);
+            setTotalPrice(res.cart.totalAmount)
+
+
+        } catch (error) {
+            setAlertMessage(error.message)
+        } finally {
+            setIsQuantityChanging(false)
+        }
+    }
+
+
+    async function removeCartItem(cartId) {
+        try {
+
+            setIsRemoving(true)
+            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/remove/${cartId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            res = await res.json();
+
+            if (!res.ok) {
+                throw new Error(res.message)
+            }
+
+            console.log(res.cart)
+            setCartItems(res.cart.items);
+            console.log(res.cart.totalAmount)
+            setTotalPrice(res.cart.totalAmount);
+            setAlertMessage(res.message);
+        } catch (error) {
+            setAlertMessage(error.message)
+            alert(error.message)
+        } finally {
+            setIsRemoving(false)
+        }
+    }
+
 
     return (
-        <div className="flex gap-4 p-4 bg-neutral-900/60 border border-neutral-800 rounded-xl backdrop-blur-sm shadow-md">
+        <div className={`flex gap-4 p-4 bg-neutral-900/60 border border-neutral-800 rounded-xl backdrop-blur-sm shadow-md ${isRemoving && 'opacity-50 pointer-events-none'}`}>
 
             {/* IMAGE */}
             <img
@@ -32,10 +107,10 @@ const CartItem = ({
 
                     <div className="flex gap-3 ">
                         <button className="text-neutral-400 hover:text-neutral-200 transition cursor-pointer">
-                            <Pencil size={24}/>
+                            <Pencil size={24} />
                         </button>
                         <button className="text-neutral-400 hover:text-neutral-200 transition cursor-pointer">
-                            <XIcon size={24} />
+                            {isRemoving ? <TinySpinner /> : <XIcon size={24} onClick={() => removeCartItem(id)} />}
                         </button>
 
                     </div>
@@ -67,9 +142,9 @@ const CartItem = ({
                 <div className="mt-3 flex justify-between items-center">
                     <QuantityInput
                         quantity={quantity}
-                        onIncrement={() => { }}
-                        onDecrement={() => { }}
-                        isChanging={false}
+                        onIncrement={() => changeQuantity(id, quantity, 'increment')}
+                        onDecrement={() => changeQuantity(id, quantity, 'decrement')}
+                        isChanging={isQuantityChanging}
                     />
 
                     <p className="text-lg font-bold text-green-400">

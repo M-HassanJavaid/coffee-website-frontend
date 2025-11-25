@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, createContext } from 'react'
+import { useEffect, useLayoutEffect, useState, createContext , lazy} from 'react'
 import { RouterProvider, createBrowserRouter, useLocation } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import { gsap } from "gsap"
@@ -9,6 +9,8 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import Menu from './pages/Menu.jsx'
 import Cart from './pages/Cart.jsx'
+
+
 
 // Sub Pages
 

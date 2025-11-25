@@ -72,6 +72,8 @@ const CartPage = () => {
                             quantity={item.quantity}
                             totalPrice={item.price.total}
                             note={item.note}
+                            setCartItems={setCartItems}
+                            setTotalPrice={setTotalPrice}
                         />
                     ))}
 
