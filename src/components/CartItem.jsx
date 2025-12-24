@@ -3,6 +3,10 @@ import { useState, useContext } from "react";
 import QuantityInput from "./quantityInput";
 import TinySpinner from "./TinySpinner";
 import { AppContext } from "../App";
+import { Link } from 'react-router-dom'
+import {CartContext} from "../pages/Cart";
+
+
 
 const CartItem = ({
     image,
@@ -11,11 +15,10 @@ const CartItem = ({
     options,
     quantity,
     totalPrice,
-    note,
-    setCartItems,
-    setTotalPrice
+    note
 }) => {
 
+    const {setCartItems , setTotalPrice : setTotalPriceOfWholeCart} = useContext(CartContext) ?? {}
     const [isRemoving, setIsRemoving] = useState(false);
     const [isQuantityChanging, setIsQuantityChanging] = useState(false)
 
@@ -49,7 +52,7 @@ const CartItem = ({
             console.log(res)
 
             setCartItems(res.cart.items);
-            setTotalPrice(res.cart.totalAmount)
+            setTotalPriceOfWholeCart(res.cart.totalAmount)
 
 
         } catch (error) {
@@ -77,7 +80,7 @@ const CartItem = ({
             console.log(res.cart)
             setCartItems(res.cart.items);
             console.log(res.cart.totalAmount)
-            setTotalPrice(res.cart.totalAmount);
+            setTotalPriceOfWholeCart(res.cart.totalAmount);
             setAlertMessage(res.message);
         } catch (error) {
             setAlertMessage(error.message)
@@ -107,7 +110,9 @@ const CartItem = ({
 
                     <div className="flex gap-3 ">
                         <button className="text-neutral-400 hover:text-neutral-200 transition cursor-pointer">
-                            <Pencil size={24} />
+                            <Link to={`/cart/edit/${id}`} >
+                                <Pencil size={24} />
+                            </Link>
                         </button>
                         <button className="text-neutral-400 hover:text-neutral-200 transition cursor-pointer">
                             {isRemoving ? <TinySpinner /> : <XIcon size={24} onClick={() => removeCartItem(id)} />}

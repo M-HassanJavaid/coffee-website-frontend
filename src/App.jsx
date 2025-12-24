@@ -9,9 +9,7 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import Menu from './pages/Menu.jsx'
 import Cart from './pages/Cart.jsx'
-
-
-
+import Checkout from './pages/Checkout.jsx'
 // Sub Pages
 
 import ProductPage from './components/ProductPage.jsx'
@@ -25,6 +23,7 @@ function App() {
 
   const [alertMessage, setAlertMessage] = useState(null)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [confirm, setConfirm] = useState({message: '' , func: () => {} })
 
 
   const router = createBrowserRouter([
@@ -54,13 +53,23 @@ function App() {
       children: [
         {
           path: ':id',
-          element: <ProductPage/>
+          element: <ProductPage isCartItem={false} />
         }
       ]
     },
     {
       path: '/cart',
-      element: <Cart/>
+      element: <Cart/>,
+      children: [
+        {
+          path: 'edit/:id',
+          element: <ProductPage  isCartItem={true} />
+        }
+      ]
+    },
+    {
+      path: '/checkout',
+      element: <Checkout/>
     },
     {
       path: '/test',
@@ -69,7 +78,7 @@ function App() {
   ])
 
   return (
-    <AppContext.Provider value={{ alertMessage, setAlertMessage , isCartOpen , setIsCartOpen }}>
+    <AppContext.Provider value={{ alertMessage, setAlertMessage , isCartOpen , setIsCartOpen , confirm , setConfirm }}>
       <RouterProvider router={router} />
     </AppContext.Provider>
   )

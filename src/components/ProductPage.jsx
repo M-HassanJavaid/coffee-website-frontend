@@ -1,33 +1,93 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { Plus, Minus, Check, X } from "lucide-react";
 import Loader from "./Loader";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 import { validateOptions } from "../util_Function/validateOption";
 import Button from "./Button";
 import QuantityInput from "./quantityInput";
+import { getSelectedOptionsWithPrice } from "../util_Function/getSelectedOptionWithPrice";
+import { mergeProductAndOrderOption } from "../util_Function/mergeProductAndOrderOption";
+import { CartContext } from "../pages/Cart";
+import ProductPageOption from "./ProductPageOption";
 
 
-const ProductPage = () => {
 
+const ProductPage = ({ isCartItem }) => {
+
+    const {cartItems, setCartItems , setTotalPrice : setTotalPriceOfWholeCart} = useContext(CartContext) ?? {}
     const [quantity, setQuantity] = useState(1);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
     const { alertMessage, setAlertMessage } = useContext(AppContext)
     const [product, setProduct] = useState(null)
-    const { id } = useParams()
+    const { id } = useParams();
     const [totalPrice, setTotalPrice] = useState(0)
     const [addingInCart, setAddingInCart] = useState(false)
-    const noteInput = useRef(null)
+    const [noteInputValue, setNoteInputValue] = useState('');
+    const navigate = useNavigate()
+
+
+    async function saveChanges() {
+        try {
+            setAddingInCart(true)
+            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/update/${id}`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    note: noteInputValue,
+                    selectedOptions: selectedOptions,
+                    quantity: quantity
+                })
+            });
+            res = await res.json();
+
+            if (!res.ok) throw new Error(res.message);
+
+            setAlertMessage('Your Changes have saved successfully')
+            setCartItems(res.cart.items);
+            setTotalPriceOfWholeCart(res.cart.totalAmount)
+            navigate('/cart' )
+
+        } catch (error) {
+
+            setAlertMessage(error.message)
+
+        } finally {
+            setAddingInCart(false)
+        }
+    }
+
+    async function getCartItem() {
+        try {
+            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/item/${id}`, {
+                credentials: 'include',
+                method: 'GET'
+            });
+            res = await res.json();
+            if (!res.ok) {
+                setAlertMessage(res.message)
+            }
+            let selectedOptions = getSelectedOptionsWithPrice(res.item.product.options, res.item.selectedOptions);
+            setSelectedOptions(selectedOptions)
+            res.item.product.options = mergeProductAndOrderOption(res.item.product.options, selectedOptions)
+            setProduct(res.item.product);
+            setQuantity(res.item.quantity);
+            setNoteInputValue(res.item.note)
+        } catch (error) {
+            setAlertMessage(error.message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     async function addToCart(orderOptions, productOption, productId) {
         try {
             setAddingInCart(true)
             let result = await validateOptions(orderOptions, productOption);
-            console.log(result.message + result.valid)
-            if (!result.valid) {
-                throw new Error(result.message)
-            }
             if (!result.valid) throw new Error(result.message)
             let res = await fetch('https://coffee-website-backend-gamma.vercel.app/cart/add', {
                 method: 'POST',
@@ -38,11 +98,10 @@ const ProductPage = () => {
                 body: JSON.stringify({
                     product: productId,
                     quantity: quantity,
-                    note: noteInput.current.value,
+                    note: noteInputValue,
                     selectedOptions: selectedOptions
                 })
             });
-            // if (!res.ok) throw new Error('Server Error!');
             res = await res.json();
             if (!res.ok) throw new Error(res.message)
             setAlertMessage(res.message)
@@ -77,9 +136,14 @@ const ProductPage = () => {
     }
 
 
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
-        getProduct()
+        if (isCartItem) {
+            getCartItem()
+        } else {
+            getProduct()
+        }
         return () => document.body.style.overflow = "auto";
     }, []);
 
@@ -91,12 +155,12 @@ const ProductPage = () => {
         return totalExtraPrice
     };
 
+
     useEffect(() => {
         if (!product) return;
-        console.log("Discounted Price =>" + product.discountedPrice)
         const totalPrice = (product.discountedPrice + calculateExtras()) * quantity;
         setTotalPrice(totalPrice)
-    }, [product, quantity, selectedOptions])
+    }, [quantity, selectedOptions])
 
 
     const handleOptionChange = (optName, extraPrice, value) => {
@@ -116,7 +180,6 @@ const ProductPage = () => {
             return newSelectedOption
         })
 
-        console.dir(selectedOptions, { depth: null })
     };
 
 
@@ -163,69 +226,8 @@ const ProductPage = () => {
                             <p className="text-black text-sm mt-2 leading-relaxed">{product.description}</p>
 
                             {/* OPTIONS */}
-                            <div className="mt-5 space-y-4 overflow-y-auto pr-2 max-h-[150px] custom-scroll">
-                                {product.options.map((opt, i) => (
-                                    <div key={i} className="border rounded-xl p-3 bg-neutral-50">
-                                        <div className="flex justify-between">
-                                            <p className="font-medium text-neutral-800">{opt.name}</p>
-                                            {opt.isRequired && (
-                                                <span className="text-xs bg-rose-100 text-rose-700 px-2 py-1 rounded-md">
-                                                    Required
-                                                </span>
-                                            )}
-                                        </div>
 
-                                        <div className="mt-2 space-y-1">
-                                            {!opt.isRequired && (
-                                                <label
-                                                    className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-neutral-100"
-                                                >
-                                                    <input
-                                                        required
-                                                        defaultChecked
-                                                        type="radio"
-                                                        value={''}
-                                                        name={opt.name}
-                                                        onChange={() =>
-                                                            handleOptionChange(opt.name, 0, '')
-                                                        }
-                                                        className="accent-neutral-900"
-                                                    />
-                                                    <span className="text-neutral-700">
-                                                        None
-                                                    </span>
-                                                </label>
-                                            )}
-                                            {opt.values.map((value, idx) => (
-                                                <label
-                                                    key={idx}
-                                                    className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-neutral-100"
-                                                >
-                                                    <input
-                                                        required
-                                                        type="radio"
-                                                        name={opt.name}
-                                                        value={value.label}
-                                                        onChange={() =>
-                                                            handleOptionChange(opt.name, value.extraPrice, value.label)
-                                                        }
-                                                        className="accent-neutral-900"
-                                                    />
-                                                    <span className="text-neutral-700">
-                                                        {value.label}{" "}
-                                                        {value.extraPrice > 0 && (
-                                                            <span className="text-rose-600 font-medium">
-                                                                + Rs.{value.extraPrice}
-                                                            </span>
-                                                        )}
-                                                    </span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-
-                            </div>
+                            <ProductPageOption productOpions={product.options} handleOptionChange={handleOptionChange} /> 
 
                             {/* QUANTITY */}
                             <div>
@@ -237,9 +239,12 @@ const ProductPage = () => {
                                 />
                             </div>
 
-                            <textarea ref={noteInput} placeholder="Any special instruction for this..." className="resize-none bg-white text-black placeholder:text-black/70 rounded-lg p-3 my-2"></textarea>
-
-                            {/* TOTAL PRICE */}
+                            <textarea
+                                value={noteInputValue}
+                                placeholder="Any special instruction for this..."
+                                className="resize-none bg-white text-black placeholder:text-black/70 rounded-lg p-3 my-2"
+                                onChange={(e) => setNoteInputValue(e.target.value)}
+                            />
                             <div className="mt-5 bg-neutral-100 p-3 rounded-xl border flex justify-between items-center">
                                 <span className="font-semibold text-neutral-700">Total Price:</span>
                                 <span className="text-xl font-bold text-rose-600">
@@ -248,7 +253,15 @@ const ProductPage = () => {
                             </div>
 
                             {/* BUTTON */}
-                            <Button title='Add to Cart' className='my-3 grow-0' isLoading={addingInCart} func={() => addToCart(selectedOptions, product.options, product._id)} />
+                            <Button title={isCartItem ? 'Save Changes' : 'Add to Cart'} className='my-3 grow-0' isLoading={addingInCart}
+                                func={() => {
+                                    if (isCartItem) {
+                                        saveChanges()
+                                    } else {
+                                        addToCart(selectedOptions, product.options, product._id)
+                                    }
+                                }}
+                            />
 
                         </div>
                     </>

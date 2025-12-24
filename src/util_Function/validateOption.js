@@ -1,5 +1,10 @@
 export async function validateOptions(orderedOptions, productOptions) {
 
+    // console.log('order options')
+    // console.log(orderedOptions)
+    // console.log('product options')
+    // console.log(productOptions)
+
     // 1️⃣ Check if all required fields are provided
     for (const productOption of productOptions) {
         if (productOption.isRequired) {
@@ -55,12 +60,15 @@ export async function validateOptions(orderedOptions, productOptions) {
         
         // Checking is option required
         if (!orderedOption.value && !productOption.isRequired) {
-            break;
+            continue;
         }
 
         let foundValue = false;
 
+        
+
         for (const optionValue of availableValues) {
+
             if (optionValue.label === orderedOption.value) {
                 // ✅ Value is valid, add its price
                 totalExtraPrice += optionValue.extraPrice;

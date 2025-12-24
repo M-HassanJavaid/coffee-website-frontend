@@ -1,0 +1,81 @@
+{
+  "countries": {
+    "Pakistan": {
+      "Punjab": [
+        "Lahore",
+        "Faisalabad",
+        "Rawalpindi",
+        "Gujranwala",
+        "Multan",
+        "Sialkot",
+        "Bahawalpur",
+        "Sargodha",
+        "Sheikhupura",
+        "Gujrat",
+        "Jhang",
+        "Kasur",
+        "Rahim Yar Khan",
+        "Sahiwal",
+        "Okara",
+        "Daska"
+      ],
+      "Sindh": [
+        "Karachi",
+        "Hyderabad",
+        "Sukkur",
+        "Larkana",
+        "Mirpur Khas",
+        "Nawabshah",
+        "Badin",
+        "Jacobabad",
+        "Shikarpur",
+        "Dadu"
+      ],
+      "Khyber Pakhtunkhwa": [
+        "Peshawar",
+        "Mardan",
+        "Abbottabad",
+        "Swat",
+        "Kohat",
+        "Dera Ismail Khan",
+        "Charsadda",
+        "Mansehra",
+        "Nowshera",
+        "Haripur"
+      ],
+      "Balochistan": [
+        "Quetta",
+        "Gwadar",
+        "Turbat",
+        "Khuzdar",
+        "Sibi",
+        "Zhob",
+        "Chaman",
+        "Pasni",
+        "Hub",
+        "Dera Murad Jamali"
+      ],
+      "Islamabad Capital Territory": [
+        "Islamabad"
+      ],
+      "Azad Jammu & Kashmir": [
+        "Muzaffarabad",
+        "Mirpur",
+        "Kotli",
+        "Rawalakot",
+        "Bagh",
+        "Bhimber",
+        "Hattian"
+      ],
+      "Gilgit-Baltistan": [
+        "Gilgit",
+        "Skardu",
+        "Hunza",
+        "Ghizer",
+        "Diamer",
+        "Ghanche",
+        "Astore"
+      ]
+    }
+  }
+}

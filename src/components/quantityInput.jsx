@@ -11,7 +11,7 @@ const QuantityInput = ({ quantity, onIncrement, onDecrement, isChanging }) => {
                 disabled={isChanging}
                 className="w-10 h-10 flex items-center justify-center rounded-lg 
                            border border-neutral-300 bg-neutral-100 hover:bg-neutral-200
-                           disabled:opacity-50 disabled:cursor-not-allowed transition"
+                           disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
             >
                 <Minus size={18} className="text-neutral-700" />
             </button>
@@ -33,7 +33,7 @@ const QuantityInput = ({ quantity, onIncrement, onDecrement, isChanging }) => {
                 disabled={isChanging}
                 className="w-10 h-10 flex items-center justify-center rounded-lg 
                            border border-neutral-300 bg-neutral-100 hover:bg-neutral-200
-                           disabled:opacity-50 disabled:cursor-not-allowed transition"
+                           disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer"
             >
                 <Plus size={18} className="text-neutral-700" />
             </button>

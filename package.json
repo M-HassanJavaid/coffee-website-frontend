@@ -14,6 +14,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.0",
+    "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/vite": "^4.1.17",
     "clsx": "^2.1.1",
     "gsap": "^3.13.0",
@@ -21,12 +22,14 @@
     "motion": "^12.23.24",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hook-form": "^7.67.0",
     "react-router-dom": "^7.9.4",
     "react-slick": "^0.31.0",
     "slick-carousel": "^1.8.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.17",
-    "validator": "^13.15.20"
+    "validator": "^13.15.20",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

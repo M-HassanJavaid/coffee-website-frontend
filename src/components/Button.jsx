@@ -9,7 +9,7 @@ const Button = ({
     className, 
     id, 
     element,
-    isLoading = false 
+    isLoading = false
 }) => {
 
     let themeClass = invert

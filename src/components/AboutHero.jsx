@@ -44,7 +44,7 @@ export default function AboutHero() {
   return (
     <section
       ref={heroRef}
-      className="w-full min-h-screen flex items-center justify-center overflow-hidden bg-neutral-800 text-zinc-50 isolate pt-[100px]"
+      className="w-full min-h-screen flex items-center justify-center overflow-hidden bg-neutral-800 text-zinc-50 isolate"
     >
       {/* Background Image with Overlay */}
       <img src="/about-bg.webp" alt="" className="fixed -z-20 h-screen w-screen object-cover object-center inset-0 about-bg bg-cover bg-center scale-100 transition-all duration-1000"/>

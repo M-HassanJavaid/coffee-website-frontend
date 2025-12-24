@@ -5,6 +5,11 @@
     scroll-behavior: smooth;
 }
 
+*::selection{
+    background-color: white;
+    color: black;
+}
+
 
 body {
     overflow-x: hidden;

@@ -4,14 +4,15 @@ import CartItem from "./CartItem";
 import Loader from "./Loader";
 import { AppContext } from "../App";
 import Button from "./Button";
+import { CartContext } from "../pages/Cart";
+
 
 const CartPage = () => {
 
-    const { alertMessage, setAlertMessage } = useContext(AppContext);
-
-    const [cartItems, setCartItems] = useState([]);
+    const { alertMessage, setAlertMessage , setConfirm } = useContext(AppContext);
+    const { cartItems, setCartItems, totalPrice, setTotalPrice } = useContext(CartContext) ?? {}
     const [isLoading, setIsLoading] = useState(true);
-    const [totalPrice, setTotalPrice] = useState("Calculating...");
+
 
     async function getCart() {
         try {
@@ -37,7 +38,22 @@ const CartPage = () => {
         getCart();
     }, []);
 
-    const handleClearCart = () => {};
+    async function handleClearCart() {
+        try {
+            setIsLoading(true);
+            let res = await fetch('https://coffee-website-backend-gamma.vercel.app/cart/clear', {
+                method: "DELETE",
+                credentials: 'include'
+            });
+            res = await res.json();
+            setCartItems(res.cart.items);
+            setAlertMessage(res.message);
+        } catch (error) {
+            setAlertMessage(error.message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     if (isLoading) return <Loader style={{ minHeight: "100vh" }} />;
 
@@ -47,12 +63,12 @@ const CartPage = () => {
 
                 {/* HEADER */}
                 <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold">Your Cart</h1>
+                    {cartItems.length > 0 && <h1 className="text-3xl font-bold">Your Cart</h1> } 
 
                     {cartItems.length > 0 && (
                         <button
-                            onClick={handleClearCart}
-                            className="flex items-center gap-2 text-red-400 hover:text-red-300 transition"
+                            onClick={()=> setConfirm({message: 'Do you want to clear all items?' , func : handleClearCart})}
+                            className="flex items-center gap-2 text-red-400 hover:text-red-300 transition cursor-pointer"
                         >
                             <Trash2 size={18} />
                             Clear Cart
@@ -72,15 +88,16 @@ const CartPage = () => {
                             quantity={item.quantity}
                             totalPrice={item.price.total}
                             note={item.note}
-                            setCartItems={setCartItems}
-                            setTotalPrice={setTotalPrice}
                         />
                     ))}
 
                     {cartItems.length === 0 && (
-                        <p className="text-center text-xl mt-16 text-neutral-400">
-                            Your cart is empty 🛒
-                        </p>
+                        <>
+                            <p className="text-center text-xl my-16 text-neutral-400">
+                                Your cart is empty 🛒
+                            </p>
+                            <Button title='Order Now' path='/menu' className='max-w-[500px] mx-auto block'  />
+                        </>
                     )}
                 </div>
 
@@ -92,10 +109,8 @@ const CartPage = () => {
                             <span className="text-green-400">Rs. {totalPrice}</span>
                         </div>
 
-                        {/* <button className="w-full mt-5 py-4 text-lg font-semibold bg-green-600 hover:bg-green-500 rounded-xl transition-all shadow-lg shadow-green-600/20">
-                            Proceed to Checkout
-                        </button> */}
-                        <Button title='Proceed to Checkout' className='my-3' />
+    
+                        <Button title='Proceed to Checkout' path='/checkout' className='my-3' />
                     </div>
                 )}
             </div>
