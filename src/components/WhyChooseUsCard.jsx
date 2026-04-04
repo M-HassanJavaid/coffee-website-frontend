@@ -1,4 +1,4 @@
-import { useRef , useEffect , useContext , useLayoutEffect} from 'react'
+import { useRef, useEffect, useContext, useLayoutEffect } from 'react'
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HomeContext } from '../pages/Home';
@@ -14,10 +14,10 @@ const WhyChooseUsCard = ({ img, title, desc }) => {
       y: 0,
       duration: 1,
       ease: "power3.out",
-    }, { 
+    }, {
       y: 150,
-      scrollTrigger:{
-        trigger: card.current, 
+      scrollTrigger: {
+        trigger: card.current,
         start: "top 70%",
         end: "top 10%",
         scrub: 3,
@@ -26,9 +26,9 @@ const WhyChooseUsCard = ({ img, title, desc }) => {
     })
 
   }, [])
-  
-    
-  useLayoutEffect(()=> ScrollTrigger.refresh() , [isLoading])
+
+
+  useLayoutEffect(() => ScrollTrigger.refresh(), [isLoading])
 
   return (
     <div className='h-90 w-75 m-3 bg-black relative isolate py-3 rounded-sm overflow-hidden text-center'>

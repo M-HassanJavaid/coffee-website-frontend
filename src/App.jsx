@@ -6,10 +6,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import About from './pages/About.jsx'
-import Contact from './pages/Contact.jsx'
 import Menu from './pages/Menu.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 // Sub Pages
 
 import ProductPage from './components/ProductPage.jsx'
@@ -24,6 +24,33 @@ function App() {
   const [alertMessage, setAlertMessage] = useState(null)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [confirm, setConfirm] = useState({message: '' , func: () => {} })
+  const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        let res = await fetch('https://coffee-website-backend-gamma.vercel.app/auth/refreshToken', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        const data = await res.json();
+        if (data.ok) {
+          // You might want to fetch actual user profile here if refreshToken doesn't return it
+          // For now, we'll assume the session is valid
+          setUser({ name: 'User' }); // Minimal user object
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    checkAuth();
+  }, []);
 
 
   const router = createBrowserRouter([
@@ -44,10 +71,6 @@ function App() {
       element: <About />
     },
     {
-      path: '/contact',
-      element: <Contact/>
-    },
-    {
       path: '/menu',
       element: <Menu/>,
       children: [
@@ -59,7 +82,7 @@ function App() {
     },
     {
       path: '/cart',
-      element: <Cart/>,
+      element: <ProtectedRoute><Cart/></ProtectedRoute>,
       children: [
         {
           path: 'edit/:id',
@@ -69,7 +92,7 @@ function App() {
     },
     {
       path: '/checkout',
-      element: <Checkout/>
+      element: <ProtectedRoute><Checkout/></ProtectedRoute>
     },
     {
       path: '/test',
@@ -78,7 +101,7 @@ function App() {
   ])
 
   return (
-    <AppContext.Provider value={{ alertMessage, setAlertMessage , isCartOpen , setIsCartOpen , confirm , setConfirm }}>
+    <AppContext.Provider value={{ alertMessage, setAlertMessage , isCartOpen , setIsCartOpen , confirm , setConfirm, user, setUser, isLoading }}>
       <RouterProvider router={router} />
     </AppContext.Provider>
   )

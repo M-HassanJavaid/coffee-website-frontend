@@ -55,13 +55,13 @@ const CTASection = ({parentPage}) => {
   return (
     <section
       ref={sectionRef}
-      className="bg-neutral-800 text-zinc-50 py-20 px-6 relative"
+      className="bg-neutral-800 text-zinc-50 py-16 md:py-20 px-6 relative min-h-[50vh] md:min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <div className="max-w-5xl mx-auto text-center space-y-6 cta-content">
-        <h2 className="text-5xl font-extrabold font-fjalla tracking-wide max-sm:text-4xl">
+      <div className="max-w-5xl mx-auto text-center space-y-4 md:space-y-6 cta-content relative z-10 w-full px-4">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold font-fjalla tracking-wide leading-tight">
           Start Your Coffee Journey Today ☕
         </h2>
-        <p className="text-zinc-300 max-w-2xl mx-auto text-lg">
+        <p className="text-zinc-200 max-w-2xl mx-auto text-base md:text-lg leading-relaxed opacity-90 pb-4 md:pb-6">
           Discover the finest blends, enjoy handcrafted flavors, and experience
           coffee made with passion. Every sip tells a story — make yours
           unforgettable.

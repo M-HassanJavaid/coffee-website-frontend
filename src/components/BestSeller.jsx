@@ -59,17 +59,17 @@ const BestSeller = () => {
   }
 
   return (
-    <section className="bg-neutral-800 bestSellerSection" ref={bestSellerSec}>
-      <h1 className="text-7xl text-center font-extrabold font-fjalla text-shadow-black px-3 py-10 text-zinc-50 max-sm:text-6xl">
+    <section className="bg-neutral-800 py-12 md:py-20 bestSellerSection" ref={bestSellerSec}>
+      <h1 className="text-4xl sm:text-5xl md:text-7xl text-center font-extrabold font-fjalla text-shadow-black px-4 mb-8 text-zinc-50 leading-tight">
         Our BestSeller
       </h1>
-      <div className="flex justify-center gap-3 flex-wrap">
+      <div className="flex justify-center gap-4 md:gap-8 flex-wrap px-4">
         {bestSellingProducts.map((p, i) => (
           <CometCard>
             <button
               type="button"
-              className="my-10 flex w-fit cursor-pointer flex-col items-stretch rounded-[16px] border-0  p-2 md:my-20 md:p-4"
-              aria-label="View invite F7RA"
+              className="my-6 md:my-10 flex w-fit cursor-pointer flex-col items-stretch rounded-[16px] border-0 p-1 md:p-3"
+              aria-label={`View ${p.name}`}
               style={{
                 transformStyle: "preserve-3d",
                 transform: "none",

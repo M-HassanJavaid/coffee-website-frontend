@@ -79,30 +79,29 @@ const OurMission = () => {
     }, []);
 
     return (
-        <section className="mission-section text-zinc-50 py-24 px-6 md:px-16 overflow-hidden isolate " ref={sectionRef}>
+        <section className="mission-section text-zinc-50 py-16 md:py-24 px-6 md:px-16 overflow-hidden isolate" ref={sectionRef}>
             <div className="max-w-6xl mx-auto text-center">
                 {/* Title */}
-                <h2 className="mission-title font-fjalla text-6xl font-bold mb-6">
+                <h2 className="mission-title font-fjalla text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
                     Our Mission
                 </h2>
                 {/* Description */}
-                <p className="mission-text text-lg text-zinc-300 max-w-2xl mx-auto mb-16">
+                <p className="mission-text text-base md:text-lg text-zinc-300 max-w-2xl mx-auto mb-10 md:mb-16 leading-relaxed opacity-90 px-4">
                     To empower creators and businesses with design, innovation, and digital
                     excellence. We strive to craft experiences that connect people and leave
                     a lasting impact.
                 </p>
 
                 {/* Mission Cards */}
-                <div className="flex justify-center gap-5 flex-wrap">
-                    {missionData.map((d)=> (
-                    <WobbleCard containerClassName='mission-card max-w-lg bg-neutral-950 backdrop-blur-lg border-2 border-white hover:border-4 hover:border-amber-400'>
-                        <div className="mission-card bg-transparent p-8 rounded-2xl transition-all duration-500">
-                            <h3 className="text-2xl font-semibold mb-4 text-amber-400">{d.title}</h3>
-                            <p className="text-zinc-300">{d.para}</p>
+                <div className="flex justify-center gap-4 md:gap-6 flex-wrap px-4">
+                    {missionData.map((d, i)=> (
+                    <WobbleCard key={i} containerClassName='mission-card max-w-[320px] sm:max-w-md bg-neutral-950/50 backdrop-blur-md border-[1px] border-white/20 hover:border-amber-400/50 transition-colors duration-500'>
+                        <div className="mission-card bg-transparent p-6 md:p-8 rounded-2xl">
+                            <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-amber-400 italic tracking-wide">{d.title}</h3>
+                            <p className="text-zinc-300 text-sm md:text-base leading-relaxed opacity-80">{d.para}</p>
                         </div>
                     </WobbleCard>
                     ))}
-                    
                 </div>
             </div>
         </section>

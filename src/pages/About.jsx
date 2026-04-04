@@ -18,7 +18,6 @@ const About = () => {
                 start: 'top 90%',
                 end: 'top 50%',
                 scrub: true,
-                markers: true
             }
         })
 

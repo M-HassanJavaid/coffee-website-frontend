@@ -13,6 +13,7 @@
 
 body {
     overflow-x: hidden;
+    width: 100%;
 }
 
 .font-fjalla {
@@ -20,34 +21,52 @@ body {
 }
 
 .text-shadow-black {
-    text-shadow: 4px 4px 10px rgb(0, 0, 0);
+    text-shadow: 2px 2px 8px rgb(0, 0, 0);
 }
 
-
+@media (min-width: 768px) {
+    .text-shadow-black {
+        text-shadow: 4px 4px 10px rgb(0, 0, 0);
+    }
+}
 
 /* Change dot color */
 .slick-dots li button:before {
     color: white !important;
-    /* gray color for inactive dots */
-    font-size: 12px !important;
-    /* smaller dot size */
+    font-size: 10px !important;
+}
+
+@media (min-width: 640px) {
+    .slick-dots li button:before {
+        font-size: 12px !important;
+    }
 }
 
 /* Change active dot color */
 .slick-dots li.slick-active button:before {
-    color: yellow !important;
-    /* bright green for active dot */
-    font-size: 14px !important;
+    color: #fbbf24 !important; /* amber-400 */
+    font-size: 12px !important;
 }
 
-
+@media (min-width: 640px) {
+    .slick-dots li.slick-active button:before {
+        font-size: 14px !important;
+    }
+}
 
 @media (max-width: 1024px) {
     .open-nav {
-        height: auto;
+        max-height: 500px;
+        opacity: 1;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
     }
 
     .close-nav {
-        height: 0;
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        pointer-events: none;
     }
 }

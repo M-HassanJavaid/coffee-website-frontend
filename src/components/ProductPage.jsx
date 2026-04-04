@@ -185,45 +185,47 @@ const ProductPage = ({ isCartItem }) => {
 
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 isolate">
-            <div className="w-full max-w-[1100px] rounded-3xl bg-zinc-100 shadow-2xl grid md:grid-cols-2 overflow-hidden border relative min-h-[600px] max-h-[95vh]">
-                <Link className="absolute right-2 top-2" to='/menu'>
-                    <X size={40} />
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-10 isolate overflow-y-auto">
+            <div className="w-[92%] sm:w-full max-w-[1100px] rounded-2xl md:rounded-3xl bg-white shadow-2xl grid grid-cols-1 md:grid-cols-2 overflow-hidden border border-neutral-200 relative my-auto">
+                <Link className="absolute right-2 top-2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1 md:p-2 shadow-sm" to='/menu'>
+                    <X className="w-6 h-6 md:w-10 md:h-10 text-neutral-800" />
                 </Link>
 
                 {/* IMAGE SECTION */}
                 {isLoading ? <Loader style={{ height: '100%', position: 'absolute', inset: 0, width: '100%' }} /> : product ? (
                     <>
-                        <div className="bg-[rgb(254,254,254)] flex items-center justify-center p-5">
-                            <img src={product.image.url} className="w-full h-[350px] object-contain" alt="coffee" />
+                        <div className="bg-white flex flex-col md:overflow-y-auto md:border-r border-neutral-100 custom-scroll">
+                            {/* IMAGE */}
+                            <div className="flex items-center justify-center p-6 sm:p-8 md:p-10 lg:p-12 h-64 sm:h-80 md:h-[400px] shrink-0">
+                                <img src={product.image.url} className="w-full h-full object-contain transform transition-transform hover:scale-105 duration-500" alt="coffee" />
+                            </div>
+
+                            {/* PRODUCT INFO */}
+                            <div className="p-4 sm:p-6 md:p-8 pt-0 md:pt-0 border-t border-neutral-50 md:border-t-0">
+                                <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">{product.name}</h1>
+                                
+                                <div className="mt-2 flex items-baseline gap-2">
+                                    {product.discount > 0 ? (
+                                        <>
+                                            <span className="text-xl font-bold text-rose-600">Rs. {product.discountedPrice}</span>
+                                            <span className="text-sm text-neutral-400 line-through">Rs. {product.price}</span>
+                                            <span className="text-xs bg-emerald-100 text-emerald-700 font-bold px-1.5 py-0.5 rounded ml-1">
+                                                {product.discount}% OFF
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <span className="text-xl font-bold text-rose-600">Rs. {product.discountedPrice}</span>
+                                    )}
+                                </div>
+
+                                <p className="text-neutral-600 text-sm mt-4 leading-relaxed font-normal border-l-2 border-amber-400 pl-4 py-1">
+                                    {product.description}
+                                </p>
+                            </div>
                         </div>
 
-                        {/* DETAILS SECTION */}
-
-                        <div className="p-6 flex flex-col">
-                            <h2 className="text-3xl font-bold text-neutral-800">{product.name}</h2>
-                            <p className="text-lg font-semibold text-neutral-600 mt-1">
-                                {product.discount > 0 ? (
-                                    <>
-                                        {/* Base Price:{" "} */}
-                                        <span className="text-rose-600 line-through mr-2">
-                                            Rs. {product.price}
-                                        </span>
-                                        <span className="text-green-600">
-                                            Rs. {product.discountedPrice}
-                                        </span>
-                                        <span className="text-sm text-blue-600 ml-2">
-                                            ({product.discount}% OFF)
-                                        </span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span className="text-rose-600">Rs. {product.discountedPrice}</span>
-                                    </>
-                                )}
-                            </p>
-
-                            <p className="text-black text-sm mt-2 leading-relaxed">{product.description}</p>
+                        {/* ORDERING SECTION */}
+                        <div className="p-4 sm:p-6 md:p-8 flex flex-col md:overflow-y-auto custom-scroll bg-neutral-50/30">
 
                             {/* OPTIONS */}
 
@@ -253,7 +255,7 @@ const ProductPage = ({ isCartItem }) => {
                             </div>
 
                             {/* BUTTON */}
-                            <Button title={isCartItem ? 'Save Changes' : 'Add to Cart'} className='my-3 grow-0' isLoading={addingInCart}
+                            <Button title={isCartItem ? 'Save Changes' : 'Add to Cart'} className='w-full my-3' isLoading={addingInCart}
                                 func={() => {
                                     if (isCartItem) {
                                         saveChanges()

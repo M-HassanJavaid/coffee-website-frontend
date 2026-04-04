@@ -68,17 +68,17 @@ const Process = () => {
 
   return (
     <section
-      className="bg-neutral-800 text-zinc-50 py-20 px-6"
+      className="bg-neutral-800 text-zinc-50 py-12 md:py-20 px-6 min-h-[80vh] md:min-h-screen flex items-center"
       ref={processSection}
     >
-      <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-7xl font-extrabold text-zinc-50 font-fjalla mb-5 max-sm:text-6xl">
+      <div className="max-w-6xl mx-auto text-center w-full">
+        <h2 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-zinc-50 font-fjalla mb-4 leading-tight px-4">
           How It Works?
         </h2>
-        <p className="text-zinc-50 max-w-2xl mx-auto mb-14 text-lg animate-paragraphs">
+        <p className="text-zinc-100 max-w-2xl mx-auto mb-10 text-base md:text-lg animate-paragraphs px-4 leading-relaxed">
           From sourcing to serving, we follow a meticulous process to ensure every cup delivers perfection.
         </p>
-        <div className="grid max-sm:grid-cols-1 max-lg:grid-cols-2 grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {steps.map((step, index) => (
             <ProcessCard
               key={index}

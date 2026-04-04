@@ -27,14 +27,18 @@ const whyChooseUs = () => {
     ];
 
     return (
-        <section className='bg-neutral-800 px-3 pt-10'>
-            <h1 className='font-fjalla text-7xl text-zinc-50 py-9 px-3 text-center font-extrabold max-sm:text-6xl'>Why Choose Us?</h1>
-            <p className='text-center text-zinc-50 max-w-4xl mx-auto pb-5 text-lg animate-paragraphs'>At <span className='font-bold italic tracking-widest '>Coffee Club</span>, every cup tells a story. We source the finest beans, roast them with precision,
+        <section className='bg-neutral-800 px-4 pt-12 pb-20'>
+            <h1 className='font-fjalla text-4xl sm:text-5xl md:text-7xl text-zinc-50 py-8 text-center font-extrabold px-4 leading-tight'>
+                Why Choose Us?
+            </h1>
+            <p className='text-center text-zinc-100 max-w-4xl mx-auto pb-10 text-base md:text-lg animate-paragraphs leading-relaxed px-4'>
+                At <span className='font-bold italic tracking-widest text-amber-400'>Coffee Club</span>, every cup tells a story. We source the finest beans, roast them with precision,
                 and deliver a taste that blends passion with perfection. From rich aroma to smooth flavor —
                 we’re committed to giving coffee lovers a truly elevated experience,
-                one sip at a time.</p>
+                one sip at a time.
+            </p>
 
-            <div className='flex justify-center gap-3 flex-wrap'>
+            <div className='flex justify-center gap-6 flex-wrap px-4'>
                 {features.map((f , i) => <WhyChooseUsCard {...f} key={i} />)}
             </div>
 

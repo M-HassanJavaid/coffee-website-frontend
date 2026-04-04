@@ -30,7 +30,7 @@ function OptionInput({ name, value, handleOptionChange, checked }) {
 
 const ProductPageOption = ({ productOpions, handleOptionChange }) => {
     return (
-        <div className="mt-5 space-y-4 overflow-y-auto pr-2 max-h-[150px] custom-scroll">
+        <div className="mt-4 sm:mt-5 space-y-3 sm:space-y-4 overflow-y-auto pr-2 max-h-[150px] sm:max-h-[250px] md:max-h-[300px] custom-scroll">
             {productOpions.map((opt, i) => (
                 <div key={i} className="border rounded-xl p-3 bg-neutral-50">
                     <div className="flex justify-between">

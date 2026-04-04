@@ -46,26 +46,27 @@ const Testimonials = () => {
     };
 
     return (
-        <section className="p-16 bg-neutral-800 text-zinc-50">
-            <h2 className="text-7xl text-zinc-50 font-fjalla font-extrabold text-center mb-10 max-sm:text-6xl">
+        <section className="py-16 md:py-24 px-4 md:px-16 bg-neutral-800 text-zinc-50 min-h-[50vh] md:min-h-[80vh] flex flex-col justify-center">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl text-zinc-50 font-fjalla font-extrabold text-center mb-8 md:mb-12 leading-tight">
                 What Our Clients Say?
             </h2>
 
-            <Slider {...settings}>
-                {testimonials.map((item, i) => (
-                    <div className="p-4 cursor-grab">
-                        <div className="
-                        bg-black text-zinc-50 shadow-lg rounded-2xl p-8 h-full flex flex-col 
-                        items-center text-center hover:shadow-2xl transition-all duration-500 border-4
-                        border-zinc-50 hover:border-white hover:text-zinc-50">
-                            <p className="italic mb-6 ">“{item.message}”</p>
-                            <h3 className="text-xl font-semibold text-amber-400">
-                                {item.name}
-                            </h3>
+            <div className="max-w-6xl mx-auto w-full">
+                <Slider {...settings}>
+                    {testimonials.map((item, i) => (
+                        <div key={i} className="p-2 sm:p-4 cursor-grab">
+                            <div className="
+                            bg-neutral-900 border-2 border-neutral-700 hover:border-amber-400 text-zinc-50 shadow-lg rounded-2xl p-6 sm:p-8 h-full flex flex-col 
+                            items-center text-center transition-all duration-300">
+                                <p className="italic mb-4 md:mb-6 text-sm sm:text-base leading-relaxed opacity-90">“{item.message}”</p>
+                                <h3 className="text-lg sm:text-xl font-semibold text-amber-400">
+                                    {item.name}
+                                </h3>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </Slider>
+                    ))}
+                </Slider>
+            </div>
         </section>
     );
 };
