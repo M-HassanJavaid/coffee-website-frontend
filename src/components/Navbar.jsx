@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState, useRef, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUser, faCircleArrowDown, faSignOutAlt, faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faUser, faCircleArrowDown, faSignOutAlt, faSignInAlt, faUserPlus, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -105,9 +105,17 @@ const Navbar = ({ animation }) => {
                         <div className='px-4 py-2 text-xs font-semibold text-amber-400 uppercase tracking-wider border-b border-neutral-800 mb-1'>
                           Account
                         </div>
+                        <Link 
+                          to='/orders' 
+                          onClick={() => setUserMenuOpen(false)}
+                          className='flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-neutral-800 hover:text-amber-400 rounded-lg transition-all duration-200'
+                        >
+                          <FontAwesomeIcon icon={faHistory} />
+                          My Orders
+                        </Link>
                         <button 
                           onClick={handleLogout}
-                          className='flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-amber-400 hover:text-neutral-900 rounded-lg transition-all duration-200 text-left'
+                          className='flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-rose-500/10 hover:text-rose-500 rounded-lg transition-all duration-200 text-left'
                         >
                           <FontAwesomeIcon icon={faSignOutAlt} />
                           Logout

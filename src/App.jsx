@@ -9,6 +9,7 @@ import About from './pages/About.jsx'
 import Menu from './pages/Menu.jsx'
 import Cart from './pages/Cart.jsx'
 import Checkout from './pages/Checkout.jsx'
+import Orders from './pages/Orders.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 // Sub Pages
 
@@ -93,6 +94,10 @@ function App() {
     {
       path: '/checkout',
       element: <ProtectedRoute><Checkout/></ProtectedRoute>
+    },
+    {
+      path: '/orders',
+      element: <ProtectedRoute><Orders/></ProtectedRoute>
     },
     {
       path: '/test',
