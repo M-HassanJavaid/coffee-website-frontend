@@ -35,7 +35,7 @@ const CartItem = ({
                 quantity--;
             }
 
-            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/update/${id}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/update/${id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {
@@ -67,7 +67,7 @@ const CartItem = ({
         try {
 
             setIsRemoving(true)
-            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/remove/${cartId}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/remove/${id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });

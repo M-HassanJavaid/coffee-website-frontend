@@ -27,7 +27,7 @@ const Menu = () => {
     async function getProducts() {
       try {
       
-        let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/product/all?query=${searchTerm}`);
+        let res = await fetch(`${import.meta.env.VITE_API_URL}/product/all?query=${searchTerm}`);
         res = await res.json();
         setProducts(res.products)
         console.log(res.products)

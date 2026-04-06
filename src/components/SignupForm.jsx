@@ -46,7 +46,7 @@ const SignupForm = () => {
 
             setisSubmitting(true)
 
-            let res = await fetch('https://coffee-website-backend-gamma.vercel.app/auth/signup', {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

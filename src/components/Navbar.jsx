@@ -19,8 +19,8 @@ const Navbar = ({ animation }) => {
 
   const handleLogout = async () => {
     try {
-      let res = await fetch('https://coffee-website-backend-gamma.vercel.app/auth/logout', {
-        method: 'GET',
+      let res = await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+        method: 'POST',
         credentials: 'include',
       });
       res = await res.json();

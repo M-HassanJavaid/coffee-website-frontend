@@ -17,29 +17,26 @@ const BestSeller = () => {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        let res = await fetch("https://coffee-website-backend-gamma.vercel.app/product/popular/3");
+        let res = await fetch(`${import.meta.env.VITE_API_URL}/product/popular/3`);
         res = await res.json();
         if (!res.ok) {
-          throw new Error(res.message)
+          throw new Error(res.message);
         }
         if (!res.products) {
           throw new Error("Products not found!");
         }
         setBestSellingProducts(res.products);
       } catch (error) {
-        setAlertMessage('Due to some error best selling products could not load.')
+        setAlertMessage('Due to some error best selling products could not load.');
       } finally {
-        setIsLoading((pre) => {
-          return {
-            ...pre,
-            bestSeller: false
-          }
-        })
-
+        setIsLoading((prev) => ({
+          ...prev,
+          bestSeller: false,
+        }));
       }
     }
 
-    fetchProducts()
+    fetchProducts();
   }, []);
 
 

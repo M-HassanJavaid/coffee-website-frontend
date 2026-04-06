@@ -17,7 +17,7 @@ const CartPage = () => {
     async function getCart() {
         try {
             let res = await fetch(
-                "https://coffee-website-backend-gamma.vercel.app/cart/me",
+                `${import.meta.env.VITE_API_URL}/cart/me`,
                 {
                     method: "GET",
                     credentials: "include",
@@ -41,7 +41,7 @@ const CartPage = () => {
     async function handleClearCart() {
         try {
             setIsLoading(true);
-            let res = await fetch('https://coffee-website-backend-gamma.vercel.app/cart/clear', {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/clear`, {
                 method: "DELETE",
                 credentials: 'include'
             });

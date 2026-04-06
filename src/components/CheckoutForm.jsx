@@ -1,171 +1,300 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { countries } from '../util_Function/conutriesData.json'
+import { User, MapPin, Phone, Globe, Navigation, Info, Save, Mail, Home, Truck, CreditCard, Sparkles } from 'lucide-react'
 
 
-
-const CheckoutForm = ({ register, errors }) => {
+const CheckoutForm = ({ register, errors, setValue, savedAddress }) => {
     const [country, setCountry] = useState('Pakistan')
     const [state, setState] = useState('')
-    const cityInput = useRef(null)
+    const [autoFilled, setAutoFilled] = useState(false)
 
+    // Auto-fill when savedAddress is available
+    useEffect(() => {
+        if (!savedAddress) return;
+        setValue('phone', savedAddress.phone || '');
+        setValue('streetAddress', savedAddress.street || '');
+        setValue('postalCode', savedAddress.postalCode || '');
+        setValue('landmark', savedAddress.landmark !== 'Not Given' ? savedAddress.landmark : '');
+        if (savedAddress.country) {
+            setValue('country', savedAddress.country);
+            setCountry(savedAddress.country);
+        }
+        if (savedAddress.state) {
+            setValue('state', savedAddress.state);
+            setState(savedAddress.state);
+        }
+        if (savedAddress.city) {
+            setValue('city', savedAddress.city);
+        }
+        setAutoFilled(true);
+    }, [savedAddress]);
 
     return (
-        <form className="max-w-4xl sticky top-24 w-full p-6 text-zinc-50 rounded-3xl space-y-6">
-            <h2 className="text-3xl font-extrabold text-amber-400">Shipping Address</h2>
-
-            {/* Country & State */}
-            <div className="flex flex-col md:flex-row gap-4">
-
-                {/* Country */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">Country</span>
-                    <select
-                        {...register("country")}
-                        onChange={(e) => setCountry(e.target.value)}
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
-                    >
-                        {Object.keys(countries).map((c) => (
-                            <option key={c} value={c} selected={c === "Pakistan"}>
-                                {c}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.country && <p className="text-red-800 text-sm mt-1">{errors.country.message}</p>}
-                </label>
-
-                {/* State */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">State</span>
-                    <select
-                        {...register("state")}
-                        onChange={(e) => setState(e.target.value)}
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
-                    >
-                        {countries[country] ? (
-                            <>
-                                <option value="">Select your State</option>
-                                {Object.keys(countries[country]).map((s) => (
-                                    <option key={s} value={s}>{s}</option>
-                                ))}
-                            </>
-                        ) : (
-                            <option value="">Select your country first</option>
-                        )}
-                    </select>
-                    {errors.state && <p className="text-red-800 text-sm mt-1">{errors.state.message}</p>}
-                </label>
-
+        <form id="checkoutForm" className="w-full space-y-8 bg-neutral-900/40 backdrop-blur-sm border border-neutral-800 p-8 rounded-[2rem] shadow-2xl">
+            <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-amber-400/10 rounded-xl flex items-center justify-center border border-amber-400/20">
+                    <MapPin className="w-5 h-5 text-amber-400" />
+                </div>
+                <h2 className="text-2xl font-bold text-zinc-100">Shipping Details</h2>
             </div>
 
-            {/* City & Phone */}
-            <div className="flex flex-col md:flex-row gap-4">
+            {/* Auto-fill notice */}
+            {autoFilled && (
+                <div className="flex items-center gap-3 px-4 py-3 bg-amber-400/10 border border-amber-400/20 rounded-2xl">
+                    <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                    <p className="text-xs font-semibold text-amber-300">Your saved address has been auto-filled. Review before placing your order.</p>
+                </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Full Name */}
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <User className="w-3.5 h-3.5" /> Full Name
+                    </label>
+                    <div className="relative group">
+                        <input
+                            {...register("fullName")}
+                            type="text"
+                            placeholder="John Doe"
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-amber-400 transition-colors">
+                            <User className="w-4 h-4" />
+                        </div>
+                    </div>
+                    {errors.fullName && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.fullName.message}</p>}
+                </div>
 
+                {/* Email (Optional/Derived) */}
+                <div className="space-y-2 opacity-50">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Mail className="w-3.5 h-3.5" /> Email Address
+                    </label>
+                    <div className="relative group">
+                        <input
+                            type="email"
+                            placeholder="Auto-filled from account"
+                            disabled
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/20 border border-neutral-700/50 text-zinc-500 outline-none cursor-not-allowed"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <Mail className="w-4 h-4" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Country */}
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Globe className="w-3.5 h-3.5" /> Country
+                    </label>
+                    <div className="relative group">
+                        <select
+                            {...register("country")}
+                            onChange={(e) => setCountry(e.target.value)}
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none appearance-none cursor-pointer"
+                        >
+                            {Object.keys(countries).map((c) => (
+                                <option key={c} value={c}>
+                                    {c}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-amber-400 transition-colors">
+                            <Globe className="w-4 h-4" />
+                        </div>
+                    </div>
+                    {errors.country && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.country.message}</p>}
+                </div>
+
+                {/* State */}
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Navigation className="w-3.5 h-3.5" /> State
+                    </label>
+                    <div className="relative group">
+                        <select
+                            {...register("state")}
+                            onChange={(e) => setState(e.target.value)}
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none appearance-none cursor-pointer"
+                        >
+                            {countries[country] ? (
+                                <>
+                                    <option value="">Select State</option>
+                                    {Object.keys(countries[country]).map((s) => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </>
+                            ) : (
+                                <option value="">Select country first</option>
+                            )}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-amber-400 transition-colors">
+                            <Navigation className="w-4 h-4" />
+                        </div>
+                    </div>
+                    {errors.state && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.state.message}</p>}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* City */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">City</span>
-                    <select
-                        {...register("city")}
-                        disabled={!countries?.[country]?.[state]}
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
-                    >
-                        {countries?.[country]?.[state] ? (
-                            <>
-                                <option value="">Select your city</option>
-                                {countries[country][state].map((c) => (
-                                    <option key={c} value={c}>{c}</option>
-                                ))}
-                            </>
-                        ) : (
-                            <option value="">Select your state first</option>
-                        )}
-                    </select>
-
-                    {errors.city && (
-                        <p className="text-red-800 text-sm mt-1">{errors.city.message}</p>
-                    )}
-                </label>
-
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Home className="w-3.5 h-3.5" /> City
+                    </label>
+                    <div className="relative group">
+                        <select
+                            {...register("city")}
+                            disabled={!countries?.[country]?.[state]}
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {countries?.[country]?.[state] ? (
+                                <>
+                                    <option value="">Select City</option>
+                                    {countries[country][state].map((c) => (
+                                        <option key={c} value={c}>{c}</option>
+                                    ))}
+                                </>
+                            ) : (
+                                <option value="">Select state first</option>
+                            )}
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-amber-400 transition-colors">
+                            <MapPin className="w-4 h-4" />
+                        </div>
+                    </div>
+                    {errors.city && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.city.message}</p>}
+                </div>
 
                 {/* Phone */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">Phone Number</span>
-                    <input
-                        {...register("phone")}
-                        type="text"
-                        placeholder="+923123456789"
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
-                    />
-                    {errors.phone && <p className="text-red-800 text-sm mt-1">{errors.phone.message}</p>}
-                </label>
-
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5" /> Phone Number
+                    </label>
+                    <div className="relative group">
+                        <input
+                            {...register("phone")}
+                            type="text"
+                            placeholder="+92 312 3456789"
+                            className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-amber-400 transition-colors">
+                            <Phone className="w-4 h-4" />
+                        </div>
+                    </div>
+                    {errors.phone && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.phone.message}</p>}
+                </div>
             </div>
 
             {/* Street Address */}
-            <label className="flex flex-col">
-                <span className="mb-1 text-sm font-medium text-zinc-400">Street Address</span>
-                <input
-                    {...register("streetAddress")}
-                    type="text"
-                    placeholder="House No. 123, Street 45, Gulberg, Lahore..."
-                    className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
-                />
-                {errors.streetAddress && <p className="text-red-800 text-sm mt-1">{errors.streetAddress.message}</p>}
-            </label>
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                    <MapPin className="w-3.5 h-3.5" /> Street Address
+                </label>
+                <div className="relative group">
+                    <input
+                        {...register("streetAddress")}
+                        type="text"
+                        placeholder="House No. 123, Street 45, Area..."
+                        className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600"
+                    />
+                </div>
+                {errors.streetAddress && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.streetAddress.message}</p>}
+            </div>
 
-            {/* Landmark & Postal Code */}
-            <div className="flex flex-col md:flex-row gap-4">
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Landmark */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">Landmark</span>
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Info className="w-3.5 h-3.5" /> Landmark (Optional)
+                    </label>
                     <input
                         {...register("landmark")}
                         type="text"
-                        placeholder="Near XYZ place (Optional)"
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
+                        placeholder="Near XYZ Place"
+                        className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600"
                     />
-                    {errors.landmark && <p className="text-red-800 text-sm mt-1">{errors.landmark.message}</p>}
-                </label>
+                </div>
 
                 {/* Postal Code */}
-                <label className="flex-1 flex flex-col">
-                    <span className="mb-1 text-sm font-medium text-zinc-400">Postal Code</span>
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                        <Mail className="w-3.5 h-3.5" /> Postal Code
+                    </label>
                     <input
                         {...register("postalCode")}
                         type="text"
-                        placeholder="75800"
-                        className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50"
+                        placeholder="74500"
+                        className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600"
                     />
-                    {errors.postalCode && <p className="text-red-800 text-sm mt-1">{errors.postalCode.message}</p>}
-                </label>
-
+                    {errors.postalCode && <p className="text-rose-500 text-xs font-medium mt-1 ml-2">{errors.postalCode.message}</p>}
+                </div>
             </div>
 
             {/* Description */}
-            <label className="flex flex-col">
-                <span className="mb-1 text-sm font-medium text-zinc-400">Description</span>
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                    <Info className="w-3.5 h-3.5" /> Special Instructions (Optional)
+                </label>
                 <textarea
                     {...register("description")}
-                    placeholder="Any description about this order... (Optional)"
-                    className="px-4 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-50 h-24 resize-none"
+                    placeholder="E.g. Doorbell doesn't work, please call..."
+                    className="w-full px-5 py-3.5 rounded-2xl bg-neutral-800/50 border border-neutral-700 text-zinc-100 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20 transition-all duration-300 outline-none placeholder:text-zinc-600 h-32 resize-none"
                 ></textarea>
-                {errors.description && <p className="text-red-800 text-sm mt-1">{errors.description.message}</p>}
-            </label>
+            </div>
+
+            {/* Payment Method */}
+            <div className="space-y-4 pt-4 border-t border-neutral-800/50">
+                <label className="text-sm font-semibold text-zinc-400 ml-1 flex items-center gap-2">
+                    <CreditCard className="w-3.5 h-3.5" /> Payment Method
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label className="relative flex items-center gap-4 p-5 rounded-2xl bg-neutral-800/50 border-2 border-amber-400 border-dashed cursor-pointer hover:bg-neutral-800 transition-all group overflow-hidden">
+                        <div className="w-10 h-10 bg-amber-400/10 rounded-xl flex items-center justify-center border border-amber-400/20 group-hover:scale-110 transition-transform">
+                            <Truck className="w-5 h-5 text-amber-400" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-zinc-100">Cash on Delivery</p>
+                            <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Pay when you receive</p>
+                        </div>
+                        <input type="radio" checked readOnly className="sr-only" />
+                        <div className="absolute top-2 right-2">
+                            <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-sm shadow-amber-400/50" />
+                        </div>
+                    </label>
+
+                    <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-neutral-900/20 border-2 border-neutral-800/50 opacity-40 cursor-not-allowed group">
+                        <div className="w-10 h-10 bg-neutral-800 rounded-xl flex items-center justify-center border border-neutral-700">
+                            <CreditCard className="w-5 h-5 text-zinc-600" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-zinc-500">Card / Online</p>
+                            <p className="text-[10px] text-zinc-600 font-medium uppercase tracking-widest">Coming Soon</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* Save My Data */}
-            <label className="flex items-center gap-3 cursor-pointer select-none max-w-fit">
-                <input
-                    {...register("saveData")}
-                    type="checkbox"
-                    className="w-5 h-5 rounded-md accent-amber-400 border border-zinc-700 bg-zinc-800"
-                />
-                <span className="text-zinc-50 font-medium hover:text-amber-400 transition">
-                    Save my data for next time
+            <label className="flex items-center gap-4 cursor-pointer select-none group w-fit">
+                <div className="relative">
+                    <input
+                        {...register("saveData")}
+                        type="checkbox"
+                        className="peer hidden"
+                    />
+                    <div className="w-6 h-6 rounded-lg bg-neutral-800 border border-neutral-700 peer-checked:bg-amber-400 peer-checked:border-amber-400 transition-all duration-300 flex items-center justify-center">
+                        <Save className="w-3.5 h-3.5 text-neutral-900 opacity-0 peer-checked:opacity-100 transition-opacity" />
+                    </div>
+                </div>
+                <span className="text-sm font-medium text-zinc-300 group-hover:text-amber-400 transition-colors">
+                    Save my information for a faster checkout next time
                 </span>
             </label>
-
         </form>
-
     )
 }
 

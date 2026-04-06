@@ -31,7 +31,7 @@ const ProductPage = ({ isCartItem }) => {
     async function saveChanges() {
         try {
             setAddingInCart(true)
-            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/update/${id}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/update/${id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {
@@ -63,7 +63,7 @@ const ProductPage = ({ isCartItem }) => {
 
     async function getCartItem() {
         try {
-            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/cart/item/${id}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/item/${id}`, {
                 credentials: 'include',
                 method: 'GET'
             });
@@ -89,7 +89,7 @@ const ProductPage = ({ isCartItem }) => {
             setAddingInCart(true)
             let result = await validateOptions(orderOptions, productOption);
             if (!result.valid) throw new Error(result.message)
-            let res = await fetch('https://coffee-website-backend-gamma.vercel.app/cart/add', {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const ProductPage = ({ isCartItem }) => {
 
     async function getProduct() {
         try {
-            let res = await fetch(`https://coffee-website-backend-gamma.vercel.app/product/id/${id}`);
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/product/id/${id}`);
             res = await res.json();
             if (!res.ok) throw new Error(res.message);
             let product = res.product;

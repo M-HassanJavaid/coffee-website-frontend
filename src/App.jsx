@@ -31,7 +31,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        let res = await fetch('https://coffee-website-backend-gamma.vercel.app/auth/refreshToken', {
+        let res = await fetch(`${import.meta.env.VITE_API_URL}/auth/refreshToken`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
